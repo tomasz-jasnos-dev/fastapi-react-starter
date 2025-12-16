@@ -14,3 +14,10 @@ class Item(ItemBase):
 
     class Config:
         from_attributes = True
+
+class CalculationRequest(BaseModel):
+    intA: int
+    intB: int
+
+class CalculationResponse(BaseModel):
+    result: int

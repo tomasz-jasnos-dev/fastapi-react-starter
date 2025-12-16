@@ -1,5 +1,6 @@
 fastapi
 uvicorn
+zeep
 sqlalchemy
 psycopg2
 alembic

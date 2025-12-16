@@ -38,11 +38,18 @@ function App() {
 
   const handleCreateTestItem = async () => {
     try {
+      const adjectives = ['Shiny', 'Rusty', 'Magic', 'Golden', 'Cursed', 'Ancient', 'Legendary', 'Broken', 'Ethereal', 'Heavy'];
+      const nouns = ['Sword', 'Shield', 'Potion', 'Ring', 'Amulet', 'Helmet', 'Boots', 'Cloak', 'Dagger', 'Staff'];
+
+      const randomAdjective = adjectives[Math.floor(Math.random() * adjectives.length)];
+      const randomNoun = nouns[Math.floor(Math.random() * nouns.length)];
+
       const newItem = {
-        name: `Item ${Math.floor(Math.random() * 1000)}`,
-        price: parseFloat((Math.random() * 100).toFixed(2)),
-        is_offer: Math.random() > 0.5
+        name: `${randomAdjective} ${randomNoun}`,
+        price: parseFloat((Math.random() * 100 + 10).toFixed(2)),
+        is_offer: Math.random() > 0.7
       };
+
       const response = await axios.post(`${API_URL}/items/`, newItem);
       setItems([...items, response.data]);
     } catch (err) {

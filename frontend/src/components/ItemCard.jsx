@@ -1,6 +1,11 @@
-import { Trash2, ShoppingBag } from 'lucide-react';
+import { useState } from 'react';
+import { Trash2, ShoppingBag, Calculator as CalcIcon } from 'lucide-react';
+import { Calculator } from './Calculator';
 
 export function ItemCard({ item, onDelete }) {
+    const [quantity, setQuantity] = useState(1);
+    const [showCalculator, setShowCalculator] = useState(false);
+
     return (
         <div className="card" style={{
             backgroundColor: 'var(--card-bg)',
@@ -38,9 +43,53 @@ export function ItemCard({ item, onDelete }) {
                 </div>
             </div>
 
+            <div style={{ marginTop: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>Quantity:</span>
+                <input
+                    type="number"
+                    value={quantity}
+                    onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
+                    style={{
+                        width: '60px',
+                        padding: '4px',
+                        borderRadius: '6px',
+                        border: '1px solid #E5E7EB'
+                    }}
+                />
+                <button
+                    onClick={() => setShowCalculator(!showCalculator)}
+                    title="Calculate Quantity"
+                    style={{
+                        padding: '4px 8px',
+                        borderRadius: '6px',
+                        border: '1px solid #E5E7EB',
+                        backgroundColor: showCalculator ? '#E0E7FF' : 'white',
+                        color: 'var(--primary)',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '4px',
+                        fontSize: '0.75rem'
+                    }}
+                >
+                    <CalcIcon size={14} />
+                    {showCalculator ? 'Close' : 'Calc'}
+                </button>
+            </div>
+
+            {showCalculator && (
+                <Calculator
+                    onResult={(res) => {
+                        setQuantity(res);
+                        setShowCalculator(false);
+                    }}
+                    onClose={() => setShowCalculator(false)}
+                />
+            )}
+
             <div style={{ marginTop: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <span style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--text-main)' }}>
-                    ${item.price}
+                    ${(item.price * quantity).toFixed(2)}
                 </span>
                 <button
                     onClick={() => onDelete(item.id)}

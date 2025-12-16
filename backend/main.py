@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import items
+from routers import items, calculator
 import models
 from database import engine
 
@@ -17,7 +17,8 @@ app.add_middleware(
 )
 
 app.include_router(items.router)
+app.include_router(calculator.router)
 
 @app.get("/")
 def read_root():
-    return {"Hello": "World"}
+    return {"status": "healthy"}

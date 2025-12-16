@@ -1,15 +1,49 @@
-# FastAPI + React
+# FastAPI + React Store with SOAP Integration
 
-This repository contains a full-stack application with a FastAPI backend and a React frontend.
+This project is a modern full-stack web application demonstrating the integration of legacy SOAP services into a RESTful architecture. It features a FastAPI backend acting as a gateway/proxy and a dynamic React frontend.
 
-## Structure
+## 🌟 Features
 
-- **backend/**: Contains the Python/FastAPI application.
-- **frontend/**: Contains the React application (Vite).
+### Backend (FastAPI)
+- **REST API**: CRUD operations for managing "Items" (Sword, Shield, etc.).
+- **SOAP Integration**: Acts as a client for the external [DNE Online Calculator](http://www.dneonline.com/calculator.asmx).
+- **Architecture**:
+    - Uses `zeep` for robust SOAP communication.
+    - Exposes SOAP functionality via standard REST endpoints (`/calculator/add`, etc.).
+    - Implements lazy loading for SOAP clients to ensure resilience.
+- **Database**: SQLite with SQLAlchemy ORM.
 
-## Getting Started
+### Frontend (React + Vite)
+- **Modern UI**: Clean interface using Lucide icons and responsive design.
+- **Item Management**: 
+    - Create random RPG-themed items (e.g., "Shiny Sword", "Cursed Ring").
+    - Delete items.
+- **Embedded Calculator**: 
+    - Each Item Card features a toggleable **Quantity Calculator**.
+    - Interacts with the backend SOAP proxy to perform server-side calculations (Add/Sub/Mul/Div).
+    - Automatically updates item quantity results.
 
-### 1. Backend
+## 🏗 Architecture
+
+```mermaid
+graph LR
+    User[React Frontend] -- REST JSON --> FastAPI[FastAPI Backend]
+    
+    subgraph Backend
+        FastAPI -- CRUD --> DB[(SQLite)]
+        FastAPI -- SOAP XML --> SOAP[External SOAP Service]
+    end
+    
+    SOAP -.-> |Calculator WSDL| DNE[dneonline.com]
+```
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Python 3.8+
+- Node.js 16+
+
+### 1. Backend Setup
 
 Navigate to the `backend` directory:
 ```bash
@@ -23,11 +57,12 @@ pip install -r requirements.txt
 
 Run the server:
 ```bash
-uvicorn main:app --reload
+uvicorn main:app --port 8000 --reload
 ```
-The API will be available at `http://localhost:8000`.
+The API will be available at `http://127.0.0.1:8000`.  
+interactive docs: `http://127.0.0.1:8000/docs`.
 
-### 2. Frontend
+### 2. Frontend Setup
 
 Navigate to the `frontend` directory:
 ```bash
@@ -43,4 +78,19 @@ Run the development server:
 ```bash
 npm run dev
 ```
-The application will be available at `http://localhost:5173`.
+Open your browser at `http://127.0.0.1:5173`.
+
+## 🛠 Usage
+
+1.  **Add Item**: Click the "Add Random Item" button to generate a new loot item.
+2.  **Calculate Quantity**:
+    - Click the **Calc** button on any item card.
+    - Enter two numbers (e.g., 5 and 3).
+    - Click **Multiply** (X).
+    - The backend sends this to the external SOAP service, gets `15`, and the frontend updates the item quantity to 15.
+3.  **Delete**: Use the trash icon to remove items.
+
+## 📦 Tech Stack
+
+- **Backend**: Python, FastAPI, SQLAlchemy, Zeep (SOAP client), Pydantic.
+- **Frontend**: JavaScript, React, Vite, Axios, Lucide React.
