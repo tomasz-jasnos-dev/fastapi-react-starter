@@ -11,7 +11,7 @@ This project is a modern full-stack web application demonstrating the integratio
     - Uses `zeep` for robust SOAP communication.
     - Exposes SOAP functionality via standard REST endpoints (`/calculator/add`, etc.).
     - Implements lazy loading for SOAP clients to ensure resilience.
-- **Database**: SQLite with SQLAlchemy ORM.
+- **Database**: PostgreSQL (configured in `database.py`).
 
 ### Frontend (React + Vite)
 - **Modern UI**: Clean interface using Lucide icons and responsive design.
@@ -54,6 +54,15 @@ Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
+
+Configure the database:
+1. Open `backend/database.py`.
+2. Update `SQLALCHEMY_DATABASE_URL` with your PostgreSQL credentials:
+   ```python
+   # Format: postgresql://user:password@host/dbname
+   SQLALCHEMY_DATABASE_URL = "postgresql://postgres:su@localhost/SF_SGP"
+   ```
+3. Ensure the database exists in PostgreSQL before running the app.
 
 Run the server:
 ```bash
